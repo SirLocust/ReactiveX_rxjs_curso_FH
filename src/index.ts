@@ -1,4 +1,4 @@
-import { Observable, Observer} from 'rxjs';
+import { Observable, Observer, Subject} from 'rxjs';
 
 
 const observer: Observer<any> = {
@@ -7,23 +7,25 @@ const observer: Observer<any> = {
     complete: () => console.log('next'),
 }
 
-const intervalo$:Observable<number> = new Observable( subs => {
-    let count: number = 0;
-    const interval = setInterval(() => {
-    subs.next(count)
-    count++;
-    }, 1000);
+const intervalo$: Observable<number> = new Observable( subs => {
 
-    return () =>{
-        clearInterval(interval);
-        console.log("intervalo destruido ")
-    }
 
+   const intervaID = setInterval( () => {
+        subs.next( Math.random())
+    },1000)
+
+    return () => clearInterval(intervaID)
 })
 
-const subscription = intervalo$.subscribe(observer)
-// const subscription2 = intervalo$.subscribe(observer)
+const subject$ = new Subject()
 
-setTimeout(() => {
-    subscription.unsubscribe()
-}, 3000);
+
+intervalo$.subscribe(subject$)
+
+
+// const sub1 = intervalo$.subscribe( rnd => console.log('sub1', rnd))
+// const sub2 = intervalo$.subscribe( rnd => console.log('sub2', rnd))
+
+const sub1 = subject$.subscribe( rnd => console.log('sub1', rnd))
+const sub2 = subject$.subscribe( rnd => console.log('sub2', rnd))
+
