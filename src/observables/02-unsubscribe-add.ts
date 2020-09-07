@@ -14,7 +14,7 @@ const intervalo$:Observable<number> = new Observable( subs => {
     count++;
     }, 1000);
     
-    setTimeout(() => {
+    setTimeout(() => {''
         subs.complete()
       }, 2500);
 
